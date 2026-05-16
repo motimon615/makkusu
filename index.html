@@ -179,7 +179,7 @@ html,body{height:100%;font-family:'Noto Sans JP',sans-serif;background:var(--bg)
 <div id="pg-settings" class="page">
   <div class="st" style="margin-bottom:14px">設定</div>
   <div class="card">
-    <div class="ct">拠点1</div>
+    <div class="ct">自宅</div>
     <div class="fg">
       <div class="f"><label>施術所名称</label><input type="text" id="s1-name"></div>
       <div class="f"><label>所在地</label><input type="text" id="s1-addr"></div>
@@ -191,7 +191,7 @@ html,body{height:100%;font-family:'Noto Sans JP',sans-serif;background:var(--bg)
     </div>
   </div>
   <div class="card">
-    <div class="ct">拠点2</div>
+    <div class="ct">石狩</div>
     <div class="fg">
       <div class="f"><label>施術所名称</label><input type="text" id="s2-name"></div>
       <div class="f"><label>所在地</label><input type="text" id="s2-addr"></div>
@@ -216,7 +216,7 @@ html,body{height:100%;font-family:'Noto Sans JP',sans-serif;background:var(--bg)
     <div style="display:flex;flex-direction:column;gap:10px">
       <div class="fg fg2">
         <div class="f"><label>患者ID</label><input type="text" id="p-id" readonly></div>
-        <div class="f"><label>所属拠点</label><select id="p-clinic"><option value="1">拠点1</option><option value="2">拠点2</option></select></div>
+        <div class="f"><label>所属拠点</label><select id="p-clinic"><option value="1">自宅</option><option value="2">石狩</option></select></div>
       </div>
       <div class="fg fg2">
         <div class="f"><label>氏名 *</label><input type="text" id="p-name"></div>
@@ -480,7 +480,7 @@ function renderPL(q=''){
   empty.style.display='none';
   list.innerHTML=fil.map(p=>{
     const ini=(p.name||'?')[0];
-    const ct=p.clinic==='2'?'<span class="tag tw">拠点2</span>':'<span class="tag tb">拠点1</span>';
+    const ct=p.clinic==='2'?'<span class="tag tw">石狩</span>':'<span class="tag tb">自宅</span>';
     const rc=Object.keys(db.records).filter(k=>k.startsWith(p.id+'_')).length;
     return `<div class="pc" onclick="openPF('${p.id}')"><div class="pav">${ini}</div><div class="pi"><div class="pn">${p.name||'未設定'} <span style="font-size:11px;color:var(--txt2)">${p.kana||''}</span></div><div class="pm">${p.id} | ${p.disease||'傷病名未設定'} | ${ct} | 記録${rc}件</div></div><button class="btn bgh bs" onclick="event.stopPropagation();goRec('${p.id}')">施術入力</button></div>`;
   }).join('');
@@ -626,7 +626,7 @@ async function doExport(){
     const clinic=p.clinic==='2'?db.settings.clinic2:db.settings.clinic1;
     const wb=buildWB(p,rec,m,clinic);
     const data=XLSX.write(wb,{type:'array',bookType:'xlsx'});
-    const cn=p.clinic==='2'?(db.settings.clinic2?.name||'拠点2'):(db.settings.clinic1?.name||'拠点1');
+    const cn=p.clinic==='2'?(db.settings.clinic2?.name||'石狩'):(db.settings.clinic1?.name||'自宅');
     try{
       const cf=await ensureFolder(cn,rootFolderId);
       const pf=await ensureFolder(p.name,cf);
@@ -647,7 +647,7 @@ async function doZip(){
     const clinic=p.clinic==='2'?db.settings.clinic2:db.settings.clinic1;
     const wb=buildWB(p,rec,m,clinic);
     const data=XLSX.write(wb,{type:'base64',bookType:'xlsx'});
-    const cn=p.clinic==='2'?(db.settings.clinic2?.name||'拠点2'):(db.settings.clinic1?.name||'拠点1');
+    const cn=p.clinic==='2'?(db.settings.clinic2?.name||'石狩'):(db.settings.clinic1?.name||'自宅');
     zip.file(cn+'/'+p.name+'/'+m+'_'+p.name+'_申請書.xlsx',data,{base64:true});
   }
   const blob=await zip.generateAsync({type:'blob'});
