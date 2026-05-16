@@ -331,7 +331,7 @@ async function loadAndStart(){
     const u=await r.json();
     if(u.error){
       // トークンが無効
-      sessionStorage.removeItem('gd_tok');
+      try{{sessionStorage.removeItem('gd_tok');}}catch(e){{}}
       document.getElementById('lstatus').textContent='セッションが切れました。再度ログインしてください。';
       return;
     }
@@ -357,7 +357,7 @@ async function onLoginSuccess(){
 function gLogout(){
   if(!confirm('ログアウトしますか？'))return;
   accessToken=null;
-  sessionStorage.removeItem('gd_tok');
+  try{sessionStorage.removeItem('gd_tok');}catch(e){}
   document.getElementById('ls').style.display='flex';
   document.getElementById('nav').style.display='none';
   document.getElementById('sb').style.display='none';
